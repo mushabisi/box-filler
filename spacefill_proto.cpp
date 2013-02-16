@@ -1,5 +1,5 @@
 /*
-In this prototype, find the most efficient way to fill a box with processors, and a room with boxes.
+In this prototype, find the most efficient way to fill a box with cheeses, and a room with boxes.
 
 processor = 1 tall, 2 wide, 4 deep
 box = 10 tall, 10 wide, 10 deep
@@ -11,13 +11,13 @@ room = 20 tall, 20 wide, 20 deep
 using namespace std;
 
 int compare;
-int thisBoxDimension, thisChipDimension;
+int thisBoxDimension, thisCheeseDimension;
 int otherB_D, otherC_D;
 int spaceUsed;
 int bW, bD; //necessary for setInitialValues()
 
 struct dimensions {
-	int height, width, depth;
+	int height, width, length;
 };
 
 void setInitialValues() {
@@ -27,20 +27,16 @@ void setInitialValues() {
     	compare = 0;
 };
 
-void calculateInitialSpace_Chips() {
-    for (spaceUsed = 0; (((spaceUsed + thisChipDimension) <= thisBoxDimension) && (otherC_D <= otherB_D)); compare++) { 
-        spaceUsed += thisChipDimension;    
+void calculateInitialSpace_Cheeses() {
+    for (spaceUsed = 0; (((spaceUsed + thisCheeseDimension) <= thisBoxDimension) && (otherC_D <= otherB_D)); compare++) { 
+        spaceUsed += thisCheeseDimension;    
     }
 };
 
-void calculateRemainingSpace_Chips(int CHIPDIM, int BOXDIM) {
-	if (BOXDIM >= CHIPDIM) { 
-    		int multiple = (BOXDIM / CHIPDIM); //figure out how many chip.depths fit in remaining box depth
+void calculateRemainingSpace_Cheeses(int CHEESEDIM, int BOXDIM) {
+	if (BOXDIM >= CHEESEDIM) { 
+    		int multiple = (BOXDIM / CHEESEDIM); //figure out how many cheese.lengths fit in remaining box length
     		compare = (compare + (compare * multiple)); //multiply the deduced row by the multiple
-    	}
-
-    	else {
-    		cout << "\n\nTHIS RUN INEFFICIENT"; //assuming more chips will always fit in a box's dimensions after initial row
     	}
 };
 
@@ -50,83 +46,584 @@ void calculateRemainingSpace_Chips(int CHIPDIM, int BOXDIM) {
 /*start***********************************************************************************************************************************/
 int main() {
 
-
-	dimensions chip;
-		chip.height = 1;
-		chip.width = 10;
-		chip.depth = 20;
+//start by figuring out cheddar
+	dimensions cheese;
+		cheese.height = 3;
+		cheese.width = 2;
+		cheese.length = 3;
 
 	dimensions box;
-		box.height = 20;
-		box.width = 10;
-		box.depth = 1;
+		box.height = 29;
+		box.width = 22;
+		box.length = 37;
 		bW = box.width;
-		bD = box.depth;
+		bD = box.length;
 
-	dimensions room;
-		room.height = 1;
-		room.width = 4;
-		room.depth = 8;
-
-	int noChips = 0;
+	int noCheeses = 0;
     
     
 
-/*lay the chips widthwise to box.width****************************************************************************************************/
+//FIRST BOX////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*lay the cheeses widthwise to box.width****************************************************************************************************/
     	setInitialValues();
-    	thisChipDimension = chip.width;
-    	otherC_D = chip.depth;
+    	thisCheeseDimension = cheese.width;
+    	otherC_D = cheese.length;
 
-    	//add chips widthwise til box width is full, check that other chipmeasure fits in box
-	calculateInitialSpace_Chips();
-   	calculateRemainingSpace_Chips(otherC_D, (box.depth - otherC_D));  
-    	calculateRemainingSpace_Chips(chip.height, (box.height - chip.height));
-
-    	noChips = compare;
-    
-/*lay the chips depthwise to box.width****************************************************************************************************/
-    	setInitialValues();
-    	thisChipDimension = chip.depth;
-    	otherC_D = chip.width;
-
-    	//add chips depthwise til box width is full, check that other chipmeasure fits in box
-   	calculateInitialSpace_Chips();	
-    	calculateRemainingSpace_Chips(otherC_D, (box.depth - otherC_D));   
-    	calculateRemainingSpace_Chips(chip.height, (box.height - chip.height));
-
-    	if (compare > noChips) {
-        	noChips = compare;
+    	//add cheeses widthwise til box width is full, check that other cheesemeasure fits in box
+	calculateInitialSpace_Cheeses();
+   	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));  
+    	calculateRemainingSpace_Cheeses(cheese.height, (box.height - cheese.height));
+    	if (cheese.height > box.height) {
+    		compare = 0;
     	}
 
-/*lay the chips heightwise to box.width && chip.depth to box.depth************************************************************************/
+    	noCheeses = compare;
+    
+/*lay the cheeses lengthwise to box.width***************************************************************************************************/
     	setInitialValues();
-    	thisChipDimension = chip.height;
-    	otherC_D = chip.depth;
+    	thisCheeseDimension = cheese.length;
+    	otherC_D = cheese.width;
 
-    	//add chips depthwise til box width is full, check that other chipmeasure fits in box
-    	calculateInitialSpace_Chips();
-    	calculateRemainingSpace_Chips(otherC_D, (box.depth - otherC_D));   
-    	calculateRemainingSpace_Chips(chip.width, (box.height - chip.width));
-
-    	if (compare > noChips) {
-        	noChips = compare;
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+   	calculateInitialSpace_Cheeses();	
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.height, (box.height - cheese.height));
+    	if (cheese.height > box.height) {
+    		compare = 0;
     	}
 
-/*lay the chips heightwise to box.width && chip.width to box.depth************************************************************************/
+    	if (compare > noCheeses) {
+        	noCheeses = compare;
+    	}
+
+/*lay the cheeses heightwise to box.width && cheese.length to box.length********************************************************************/
     	setInitialValues();
-    	thisChipDimension = chip.depth;
-    	otherC_D = chip.height;
+    	thisCheeseDimension = cheese.height;
+    	otherC_D = cheese.length;
 
-    	//add chips depthwise til box width is full, check that other chipmeasure fits in box
-    	calculateInitialSpace_Chips();
-    	calculateRemainingSpace_Chips(otherC_D, (box.depth - otherC_D));   
-    	calculateRemainingSpace_Chips(chip.width, (box.height - chip.width));
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+    	calculateInitialSpace_Cheeses();
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.width, (box.height - cheese.width));
+    	if (cheese.width > box.height) {
+    		compare = 0;
+    	}
 
-    	if (compare > noChips) {
-       		noChips = compare;
+    	if (compare > noCheeses) {
+        	noCheeses = compare;
+    	}
+
+/*lay the cheeses heightwise to box.width && cheese.width to box.length*********************************************************************/
+    	setInitialValues();
+    	thisCheeseDimension = cheese.length;
+    	otherC_D = cheese.height;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+    	calculateInitialSpace_Cheeses();
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.width, (box.height - cheese.width));
+    	if (cheese.width > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+       		noCheeses = compare;
     	}   
 
-/*end chip-to-box calculation************************************************************************************************************/
-    	cout << endl << endl << "The number of chips in a box = " << noChips << endl << endl;//couting 16
+/*lay the cheeses widthwise to box.width && cheese.height to box.length********************************************************************/
+    	setInitialValues();
+    	thisCheeseDimension = cheese.width;
+    	otherC_D = cheese.height;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+    	calculateInitialSpace_Cheeses();
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.length, (box.height - cheese.length));
+    	if (cheese.length > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+       		noCheeses = compare;
+    	}   
+
+/*lay the cheeses heightwise to box.width && cheese.width to box.length*********************************************************************/
+    	setInitialValues();
+    	thisCheeseDimension = cheese.height;
+    	otherC_D = cheese.width;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+    	calculateInitialSpace_Cheeses();
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.length, (box.height - cheese.length));
+    	if (cheese.length > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+       		noCheeses = compare;
+    	} 
+    	
+/*end cheese-to-box calculation************************************************************************************************************/
+    	int cheddar = noCheeses;
+    	cout << endl << endl << "The number of cheddar in a box = " << cheddar;
+
+
+
+
+
+
+
+
+
+
+
+/***************************************************************************************************************************************/    	
+//begin box to room calculation////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//this is now box dimensions
+		cheese.height = 29;
+		cheese.width = 22;
+		cheese.length = 37;
+	//this is now room dimensions
+		box.height = 101;
+		box.width = 179;
+		box.length = 131;
+		
+/*lay the boxes widthwise to room.width****************************************************************************************************/
+    	noCheeses = 0;
+    	setInitialValues();
+    	thisBoxDimension = box.width;
+    	thisCheeseDimension = cheese.width;
+    	otherC_D = cheese.length;
+    	
+
+    	//add cheeses widthwise til box width is full, check that other cheesemeasure fits in box
+	calculateInitialSpace_Cheeses();
+   	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D)); 
+    	calculateRemainingSpace_Cheeses(cheese.height, (box.height - cheese.height));
+    	if (cheese.height > box.height) {
+    		compare = 0;
+    	}
+
+    	noCheeses = compare;
+    
+/*lay the boxes lengthwise to room.width***************************************************************************************************/
+    	setInitialValues();
+    	thisCheeseDimension = cheese.length;
+    	otherC_D = cheese.width;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+   	calculateInitialSpace_Cheeses();	
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.height, (box.height - cheese.height));
+    	if (cheese.height > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+        	noCheeses = compare;
+    	}
+	
+	int room1 = noCheeses;
+	cout << endl << "The number of cheddar boxes in room 1 = " << room1 << endl <<
+		"The number of cheddars in room 1 = " << (cheddar * room1) << endl;
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+//next, figure out colby
+		cheese.height = 4;
+		cheese.width = 4;
+		cheese.length = 3;
+		
+		box.height = 29;
+		box.width = 22;
+		box.length = 37;
+
+/*lay the cheeses widthwise to box.width****************************************************************************************************/
+    	noCheeses = 0;
+    	setInitialValues();
+    	thisCheeseDimension = cheese.width;
+    	otherC_D = cheese.length;
+
+    	//add cheeses widthwise til box width is full, check that other cheesemeasure fits in box
+	calculateInitialSpace_Cheeses();
+   	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));  
+    	calculateRemainingSpace_Cheeses(cheese.height, (box.height - cheese.height));
+    	if (cheese.height > box.height) {
+    		compare = 0;
+    	}
+
+    	noCheeses = compare;
+    
+/*lay the cheeses lengthwise to box.width***************************************************************************************************/
+    	setInitialValues();
+    	thisCheeseDimension = cheese.length;
+    	otherC_D = cheese.width;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+   	calculateInitialSpace_Cheeses();	
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.height, (box.height - cheese.height));
+    	if (cheese.height > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+        	noCheeses = compare;
+    	}
+
+/*lay the cheeses heightwise to box.width && cheese.length to box.length********************************************************************/
+    	setInitialValues();
+    	thisCheeseDimension = cheese.height;
+    	otherC_D = cheese.length;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+    	calculateInitialSpace_Cheeses();
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.width, (box.height - cheese.width));
+    	if (cheese.width > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+        	noCheeses = compare;
+    	}
+
+/*lay the cheeses heightwise to box.width && cheese.width to box.length********************************************************************/
+    	setInitialValues();
+    	thisCheeseDimension = cheese.length;
+    	otherC_D = cheese.height;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+    	calculateInitialSpace_Cheeses();
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.width, (box.height - cheese.width));
+    	if (cheese.width > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+       		noCheeses = compare;
+    	}   
+
+/*lay the cheeses widthwise to box.width && cheese.height to box.length*********************************************************************/
+    	setInitialValues();
+    	thisCheeseDimension = cheese.width;
+    	otherC_D = cheese.height;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+    	calculateInitialSpace_Cheeses();
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.length, (box.height - cheese.length));
+    	if (cheese.length > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+       		noCheeses = compare;
+    	}   
+
+/*lay the cheeses heightwise to box.width && cheese.width to box.length************************************************************************/
+    	setInitialValues();
+    	thisCheeseDimension = cheese.height;
+    	otherC_D = cheese.width;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+    	calculateInitialSpace_Cheeses();
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.length, (box.height - cheese.length));
+    	if (cheese.length > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+       		noCheeses = compare;
+    	} 
+    	
+/*end cheese-to-box calculation************************************************************************************************************/
+    	int colby = (noCheeses * 2);
+    	cout << endl << endl << "The number of colby in a box = " << colby;
+
+
+
+
+
+
+
+
+
+
+
+/***************************************************************************************************************************************/    	
+//begin box to room calculation////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//this is now box dimensions
+		cheese.height = 29;
+		cheese.width = 22;
+		cheese.length = 37;
+	//this is now room dimensions
+		box.height = 96;
+		box.width = 103;
+		box.length = 181;
+		
+/*lay the boxes widthwise to room.width****************************************************************************************************/
+    	noCheeses = 0;
+    	setInitialValues();
+    	thisBoxDimension = box.width;
+    	thisCheeseDimension = cheese.width;
+    	otherC_D = cheese.length;
+    	
+
+    	//add cheeses widthwise til box width is full, check that other cheesemeasure fits in box
+	calculateInitialSpace_Cheeses();
+   	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D)); 
+    	calculateRemainingSpace_Cheeses(cheese.height, (box.height - cheese.height));
+    	if (cheese.height > box.height) {
+    		compare = 0;
+    	}
+
+    	noCheeses = compare;
+    
+/*lay the boxes lengthwise to room.width***************************************************************************************************/
+    	setInitialValues();
+    	thisBoxDimension = box.width;
+    	thisCheeseDimension = cheese.length;
+    	otherC_D = cheese.width;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+   	calculateInitialSpace_Cheeses();	
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));  
+    	calculateRemainingSpace_Cheeses(cheese.height, (box.height - cheese.height));
+    	if (cheese.height > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+        	noCheeses = compare;
+    	}
+	
+	int room2 = noCheeses;
+	cout << endl << "The number of colby boxes in room 2 = " << room2 << endl <<
+		"The number of colbies in room 2 = " << (colby * room2) << endl;
+		
+    	
+
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+//next, figure out swiss
+		cheese.height = 4;
+		cheese.width = 12;
+		cheese.length = 12;
+		
+		box.height = 29;
+		box.width = 22;
+		box.length = 37;
+
+/*lay the cheeses widthwise to box.width****************************************************************************************************/
+    	noCheeses = 0;
+    	setInitialValues();
+    	thisCheeseDimension = cheese.width;
+    	otherC_D = cheese.length;
+
+    	//add cheeses widthwise til box width is full, check that other cheesemeasure fits in box
+	calculateInitialSpace_Cheeses();
+   	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));  
+    	calculateRemainingSpace_Cheeses(cheese.height, (box.height - cheese.height));
+    	if (cheese.height > box.height) {
+    		compare = 0;
+    	}
+
+    	noCheeses = compare;
+    
+/*lay the cheeses lengthwise to box.width***************************************************************************************************/
+    	setInitialValues();
+    	thisCheeseDimension = cheese.length;
+    	otherC_D = cheese.width;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+   	calculateInitialSpace_Cheeses();	
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.height, (box.height - cheese.height));
+    	if (cheese.height > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+        	noCheeses = compare;
+    	}
+
+/*lay the cheeses heightwise to box.width && cheese.length to box.length********************************************************************/
+    	setInitialValues();
+    	thisCheeseDimension = cheese.height;
+    	otherC_D = cheese.length;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+    	calculateInitialSpace_Cheeses();
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.width, (box.height - cheese.width));
+    	if (cheese.width > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+        	noCheeses = compare;
+    	}
+
+/*lay the cheeses heightwise to box.width && cheese.width to box.length********************************************************************/
+    	setInitialValues();
+    	thisCheeseDimension = cheese.length;
+    	otherC_D = cheese.height;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+    	calculateInitialSpace_Cheeses();
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.width, (box.height - cheese.width));
+    	if (cheese.width > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+       		noCheeses = compare;
+    	}   
+
+/*lay the cheeses widthwise to box.width && cheese.height to box.length*********************************************************************/
+    	setInitialValues();
+    	thisCheeseDimension = cheese.width;
+    	otherC_D = cheese.height;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+    	calculateInitialSpace_Cheeses();
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.length, (box.height - cheese.length));
+    	if (cheese.length > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+       		noCheeses = compare;
+    	}   
+
+/*lay the cheeses heightwise to box.width && cheese.width to box.length************************************************************************/
+    	setInitialValues();
+    	thisCheeseDimension = cheese.height;
+    	otherC_D = cheese.width;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+    	calculateInitialSpace_Cheeses();
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.length, (box.height - cheese.length));
+    	if (cheese.length > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+       		noCheeses = compare;
+    	} 
+    	
+/*end cheese-to-box calculation************************************************************************************************************/
+    	int swiss = noCheeses;
+    	cout << endl << endl << "The number of swiss in a box = " << swiss;
+
+
+
+
+
+
+
+
+
+
+
+/***************************************************************************************************************************************/    	
+//begin box to room calculation////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//this is now box dimensions
+		cheese.height = 29;
+		cheese.width = 22;
+		cheese.length = 37;
+	//this is now room dimensions
+		box.height = 112;
+		box.width = 93;
+		box.length = 197;
+		
+/*lay the boxes widthwise to room.width****************************************************************************************************/
+    	noCheeses = 0;
+    	setInitialValues();
+    	thisBoxDimension = box.width;
+    	thisCheeseDimension = cheese.width;
+    	otherC_D = cheese.length;
+    	
+
+    	//add cheeses widthwise til box width is full, check that other cheesemeasure fits in box
+	calculateInitialSpace_Cheeses();
+   	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D)); 
+    	calculateRemainingSpace_Cheeses(cheese.height, (box.height - cheese.height));
+    	if (cheese.height > box.height) {
+    		compare = 0;
+    	}
+
+    	noCheeses = compare;
+    
+/*lay the boxes lengthwise to room.width***************************************************************************************************/
+    	setInitialValues();
+    	thisBoxDimension = box.width;
+    	thisCheeseDimension = cheese.length;
+    	otherC_D = cheese.width;
+
+    	//add cheeses lengthwise til box width is full, check that other cheesemeasure fits in box
+   	calculateInitialSpace_Cheeses();	
+    	calculateRemainingSpace_Cheeses(otherC_D, (box.length - otherC_D));   
+    	calculateRemainingSpace_Cheeses(cheese.height, (box.height - cheese.height));
+    	if (cheese.height > box.height) {
+    		compare = 0;
+    	}
+
+    	if (compare > noCheeses) {
+        	noCheeses = compare;
+    	}
+	int room3 = noCheeses;
+	cout << endl << "The number of swiss boxes in room 3 = " << room3 << endl <<
+		"The number of swisses in room 3 = " << (swiss * room3) << endl << endl;
+
+
+
 
 }//end
